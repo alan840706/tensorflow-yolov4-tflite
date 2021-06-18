@@ -58,13 +58,8 @@ def residual_block(input_layer, input_channel, filter_num1, filter_num2, activat
 #     input_data = tf.concat([conv, short_cut], axis=-1)
 #     return residual_output
 
-def route_group(input_layer, groups, group_id):
-    w = len(input_layer)
-    y = len(input_layer[0])
-    x = len(input_layer[0][0])
-    z = len(input_layer[0][0][0])/groups
-    convs=tf.slice(convs, [0, 0, 0, group_id*z], [w, y ,x,z])
-    
+def route_group(input_layer, w,y,x,z, group_id):
+    convs=tf.slice(convs, [0, 0, 0,z], [w, y ,x,z])
     return convs
 
 def upsample(input_layer):

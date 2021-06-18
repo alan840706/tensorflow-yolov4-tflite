@@ -59,8 +59,13 @@ def residual_block(input_layer, input_channel, filter_num1, filter_num2, activat
 #     return residual_output
 
 def route_group(input_layer, groups, group_id):
-    convs = tf.split(input_layer, num_or_size_splits=groups, axis=-1)
-    return convs[group_id]
+    w = len(input_layer)
+    y = len(input_layer[0])
+    x = len(input_layer[0][0])
+    z = len(input_layer[0][0][0])/groups
+    convs=tf.slice(convs, [0, 0, 0, group_id*z], [w, y ,x,z])
+    
+    return convs
 
 def upsample(input_layer):
     return tf.image.resize(input_layer, (input_layer.shape[1] * 2, input_layer.shape[2] * 2), method='bilinear')
